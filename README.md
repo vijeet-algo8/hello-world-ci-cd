@@ -20,20 +20,115 @@ This repository serves a simple `Hello world` page using Docker and Docker Compo
 | Step 12 |  | Add `VM_PORT` with value `22` unless the VM SSH port was changed. |  |
 | Step 13 |  | Add `VM_SSH_KEY` with the full private key from `cat ~/.ssh/hello-world-ci-cd`, including the begin and end lines. |  |
 | Step 14 |  | Add `VM_DEPLOY_PATH` with the VM project path, for example `/home/ubuntu/hello-world-ci-cd`. |  |
-| Step 15 |  |  | Paste this in the VM SSH terminal: `whoami` |
-| Step 16 |  |  | Paste this in the VM SSH terminal: `mkdir -p ~/.ssh && chmod 700 ~/.ssh && touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys` |
-| Step 17 |  |  | Paste this in the VM SSH terminal after replacing `<PASTE_LOCAL_PUBLIC_KEY_HERE>` with the local public key: `echo '<PASTE_LOCAL_PUBLIC_KEY_HERE>' >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys` |
-| Step 18 |  |  | Paste this in the VM SSH terminal: `sudo apt update && sudo apt install -y docker.io docker-compose-plugin git && sudo systemctl enable --now docker` |
-| Step 19 |  |  | Paste this in the VM SSH terminal: `sudo docker --version && sudo docker compose version` |
-| Step 20 |  |  | Paste this in the VM SSH terminal: `if [ ! -f ~/.ssh/id_ed25519 ]; then ssh-keygen -t ed25519 -C "vm-github-read-key" -f ~/.ssh/id_ed25519 -N ""; fi` |
-| Step 21 |  |  | Paste this in the VM SSH terminal: `cat ~/.ssh/id_ed25519.pub` |
+| Step 15 |  |  | Run VM command 15 to check the VM username. |
+| Step 16 |  |  | Run VM command 16 to prepare SSH permissions. |
+| Step 17 |  |  | Run VM command 17 after replacing the public key placeholder. |
+| Step 18 |  |  | Run VM command 18 to install Docker, Docker Compose, and Git. |
+| Step 19 |  |  | Run VM command 19 to check Docker installation. |
+| Step 20 |  |  | Run VM command 20 to create the VM GitHub read key. |
+| Step 21 |  |  | Run VM command 21 to show the VM GitHub public key. |
 | Step 22 |  | Go to `Settings` > `Deploy keys` > `Add deploy key`, paste the VM public key from Step 21, and keep `Allow write access` unchecked. |  |
-| Step 23 |  |  | Paste this in the VM SSH terminal: `ssh -o StrictHostKeyChecking=accept-new -T git@github.com || true` |
-| Step 24 |  |  | Paste this in the VM SSH terminal: `if [ -d ~/hello-world-ci-cd ]; then cd ~/hello-world-ci-cd && git pull origin main; else git clone git@github.com:vijeet-algo8/hello-world-ci-cd.git ~/hello-world-ci-cd && cd ~/hello-world-ci-cd; fi` |
-| Step 25 |  |  | Paste this in the VM SSH terminal: `sudo docker compose up -d --build` |
-| Step 26 |  |  | Paste this in the VM SSH terminal: `sudo docker ps` and confirm the port shows `0.0.0.0:5004->80/tcp`. |
-| Step 27 |  |  | Paste this in the VM SSH terminal: `curl http://localhost:5004` and confirm the output includes `Hello world`. |
+| Step 23 |  |  | Run VM command 23 to test GitHub SSH access. |
+| Step 24 |  |  | Run VM command 24 to clone or update the repository. |
+| Step 25 |  |  | Run VM command 25 to start the app on port `5004`. |
+| Step 26 |  |  | Run VM command 26 and confirm the port shows `0.0.0.0:5004->80/tcp`. |
+| Step 27 |  |  | Run VM command 27 and confirm the output includes `Hello world`. |
 | Step 28 |  |  | Open `http://VM-IP:5004` in the browser; the firewall rule for TCP port `5004` is already created on the VM/GCP network. |
 | Step 29 |  |  | Wow, the Hello World page is visible on `http://VM-IP:5004`. |
+
+## VM Copy-Paste Commands
+
+Command 15:
+
+```bash
+whoami
+```
+
+Command 16:
+
+```bash
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+touch ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+```
+
+Command 17:
+
+```bash
+echo '<PASTE_LOCAL_PUBLIC_KEY_HERE>' >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+```
+
+Command 18:
+
+```bash
+sudo apt update
+sudo apt install -y docker.io docker-compose-plugin git
+sudo systemctl enable --now docker
+```
+
+Command 19:
+
+```bash
+sudo docker --version
+sudo docker compose version
+```
+
+Command 20:
+
+```bash
+if [ ! -f ~/.ssh/id_ed25519 ]; then
+  ssh-keygen -t ed25519 -C "vm-github-read-key" -f ~/.ssh/id_ed25519 -N ""
+fi
+```
+
+Command 21:
+
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+
+Command 23:
+
+```bash
+ssh -o StrictHostKeyChecking=accept-new -T git@github.com
+```
+
+Expected output includes `successfully authenticated`.
+
+Command 24:
+
+```bash
+if [ -d ~/hello-world-ci-cd ]; then
+  cd ~/hello-world-ci-cd
+  git pull origin main
+else
+  git clone git@github.com:vijeet-algo8/hello-world-ci-cd.git ~/hello-world-ci-cd
+  cd ~/hello-world-ci-cd
+fi
+```
+
+Command 25:
+
+```bash
+sudo docker compose up -d --build
+```
+
+Command 26:
+
+```bash
+sudo docker ps
+```
+
+Expected output includes `0.0.0.0:5004->80/tcp`.
+
+Command 27:
+
+```bash
+curl http://localhost:5004
+```
+
+Expected output includes `Hello world`.
 
 For automated CI/CD later, add `.github/workflows/deploy-vm.yml` and use the GitHub secrets from Steps 10 to 14.
