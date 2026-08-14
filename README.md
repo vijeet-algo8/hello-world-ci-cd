@@ -22,16 +22,22 @@
 
 ## On Virtual Machine
 
-1. Open GCP Console > `Compute Engine` > `VM instances` and copy the VM external IP, which will look like `34.93.120.45`.
-2. SSH into the VM with `ssh ubuntu@34.93.120.45`, replacing `ubuntu` and the IP with your actual VM user and external IP.
-3. Open the authorized keys file with `nano ~/.ssh/authorized_keys`.
-4. Paste the public key from `cat ~/.ssh/hello-world-ci-cd.pub` into `~/.ssh/authorized_keys` on a new line.
-5. Install Docker with `sudo apt update && sudo apt install -y docker.io docker-compose-plugin`.
-6. Allow your user to run Docker with `sudo usermod -aG docker $USER`, then log out and SSH back in.
-7. Clone the repository with `git clone git@github.com:vijeet-algo8/hello-world-ci-cd.git /home/ubuntu/hello-world-ci-cd`.
-8. Go inside the project with `cd /home/ubuntu/hello-world-ci-cd`.
-9. Start the app with `docker compose up -d --build`.
-10. Check the container with `docker ps`, and the output should show `hello-world-ci-cd` with port `0.0.0.0:5004->80/tcp`.
-11. Allow GCP firewall traffic on TCP port `5004` from `VPC network` > `Firewall` if the browser cannot reach the app.
-12. Open `http://34.93.120.45:5004`, replacing `34.93.120.45` with your VM external IP.
-13. Wow, the Hello World page is visible on `http://VM-IP:5004`.
+1. Open GCP Console > `Compute Engine` > `VM instances`.
+2. Find your VM row and copy the `External IP`, which will look like `34.93.120.45`.
+3. Click the `SSH` button in the same VM row to open the browser SSH terminal.
+4. Wait until the SSH terminal shows a prompt like `username@vm-name:~$`.
+5. In that SSH terminal, create the SSH folder with `mkdir -p ~/.ssh && chmod 700 ~/.ssh`.
+6. Open the authorized keys file with `nano ~/.ssh/authorized_keys`.
+7. Paste the public key from your local command `cat ~/.ssh/hello-world-ci-cd.pub` into `~/.ssh/authorized_keys` on a new line.
+8. Save nano with `Ctrl + O`, press `Enter`, then exit with `Ctrl + X`.
+9. Fix key permissions with `chmod 600 ~/.ssh/authorized_keys`.
+10. Install Docker with `sudo apt update && sudo apt install -y docker.io docker-compose-plugin`.
+11. Allow your SSH terminal user to run Docker with `sudo usermod -aG docker $USER`.
+12. Close the browser SSH terminal and click `SSH` again so the Docker group change is active.
+13. Clone the repository with `git clone git@github.com:vijeet-algo8/hello-world-ci-cd.git ~/hello-world-ci-cd`.
+14. Go inside the project with `cd ~/hello-world-ci-cd`.
+15. Start the app with `docker compose up -d --build`.
+16. Check the container with `docker ps`, and the output should show `hello-world-ci-cd` with port `0.0.0.0:5004->80/tcp`.
+17. Allow GCP firewall traffic on TCP port `5004` from `VPC network` > `Firewall` if the browser cannot reach the app.
+18. Open `http://34.93.120.45:5004`, replacing `34.93.120.45` with your VM external IP.
+19. Wow, the Hello World page is visible on `http://VM-IP:5004`.
