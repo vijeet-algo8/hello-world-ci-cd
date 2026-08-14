@@ -56,8 +56,8 @@ This repository serves a simple `Hello world` page using Docker and Docker Compo
 22. Start the app with `docker compose up -d --build`.
 23. Check the container with `docker ps`, and the expected port output is `0.0.0.0:5004->80/tcp`.
 24. Test inside the VM with `curl http://localhost:5004`, and the output should include `Hello world`.
-25. Open GCP Console > `VPC network` > `Firewall` > `Create firewall rule` if port `5004` is not reachable from the browser.
-26. Create the firewall rule with direction `Ingress`, action `Allow`, target as the VM network tag, source `0.0.0.0/0`, and protocol `tcp:5004`.
-27. Add the same firewall target tag to the VM from `Compute Engine` > `VM instances` > your VM > `Edit` > `Network tags`.
+25. Firewall rule for TCP port `5004` is already created on the VM/GCP network, so no new firewall rule is needed.
+26. If the browser still cannot reach port `5004`, verify GCP Console > `VPC network` > `Firewall` has an ingress allow rule for `tcp:5004`.
+27. If the firewall rule uses a target tag, confirm the same tag is added from `Compute Engine` > `VM instances` > your VM > `Edit` > `Network tags`.
 28. Open `http://34.93.120.45:5004`, replacing `34.93.120.45` with your VM external IP.
 29. Wow, the Hello World page is visible on `http://VM-IP:5004`.
