@@ -1,0 +1,7 @@
+services:
+  hello-world:
+    build: .
+    container_name: hello-world-ci-cd
+    restart: unless-stopped
+    ports:
+      - "5004:80"
